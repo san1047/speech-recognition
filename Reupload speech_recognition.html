@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Speech Recognition and Translation</title>
+</head>
+<body>
+  <script>
+    function startListening() {
+      const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+      recognition.lang = 'hi-IN'; // Set language to Hindi
+      recognition.interimResults = false;
+      recognition.maxAlternatives = 1;
+
+      recognition.onresult = function(event) {
+        const text = event.results[0][0].transcript;
+        window.ReactNativeWebView.postMessage(text);
+      };
+
+      recognition.onspeechend = function() {
+        recognition.stop();
+        startListening(); // Restart listening after speech ends
+      };
+
+      recognition.start();
+    }
+
+    startListening();
+  </script>
+</body>
+</html>
